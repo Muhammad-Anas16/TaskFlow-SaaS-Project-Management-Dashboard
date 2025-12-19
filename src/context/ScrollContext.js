@@ -25,3 +25,5 @@ const useScroll = () => {
     }
     return context;
 }
+
+export { ScrollProvider, useScroll };
