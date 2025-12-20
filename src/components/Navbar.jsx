@@ -1,81 +1,103 @@
 "use client";
 
 import { useState } from "react";
-import { useScroll } from "@/context/ScrollContext";
+// import { useScroll } from "@/context/ScrollContext";
 import { TbConeFilled } from "react-icons/tb";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { IoClose } from "react-icons/io5";
+import { IoCloseSharp } from "react-icons/io5";
 
 const NAV_ITEMS = [
-  { label: "Home", id: "home" },
-  { label: "About", id: "about" },
-  { label: "Services", id: "services" },
-  { label: "Contact", id: "contact" },
+  { label: "Features", id: "features" },
+  { label: "How It Works", id: "works" },
+  { label: "Pricing", id: "pricing" },
+  { label: "Log In", id: "login" },
 ];
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const { scrollToSection } = useScroll();
+  // const { scrollToSection } = useScroll();
 
   const handleClick = (id) => {
-    scrollToSection(id);
-    setOpen(false);
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+      setOpen(false);
+    }
   };
 
   return (
-    <nav className="bg-neutral-primary fixed w-full z-20 top-0 border-b border-default">
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        {/* Logo */}
-        <button
-          onClick={() => handleClick("home")}
-          className="flex items-center space-x-3"
-        >
-          <TbConeFilled className="h-7 w-7" />{" "}
-          <span className="text-xl text-heading font-semibold">Flowbite</span>
-        </button>
-
-        {/* Right buttons */}
-        <div className="flex md:order-2 space-x-3">
-          <button
-            onClick={() => handleClick("contact")}
-            className="text-white bg-brand hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium rounded-base text-sm px-3 py-2"
+    <nav className="fixed top-0 z-50 w-full border-b border-white/10 bg-[#112118]">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="flex h-16 items-center justify-between">
+          {/* Logo */}
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => scrollToSection("home")}
           >
-            Get started
-          </button>
+            <TbConeFilled className="text-[#36E27B] h-7 w-7" />
 
-          {/* Mobile toggle */}
-          <button
-            onClick={() => setOpen(!open)}
-            className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-base hover:bg-neutral-secondary-soft"
-          >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24">
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeWidth="2"
-                d="M5 7h14M5 12h14M5 17h14"
-              />
-            </svg>
-          </button>
-        </div>
+            {/* Desktop */}
+            <span className="hidden sm:block text-2xl font-semibold text-white">
+              TaskFlow
+            </span>
 
-        {/* Menu */}
-        <div
-          className={`w-full md:flex md:w-auto md:order-1 ${
-            open ? "block" : "hidden"
-          }`}
-        >
-          <ul className="flex flex-col md:flex-row md:space-x-8 mt-4 md:mt-0 p-4 md:p-0 border md:border-0 rounded-base bg-neutral-secondary-soft md:bg-transparent">
+            {/* Mobile */}
+            <span className="block sm:hidden text-lg font-semibold leading-tight text-white">
+              {/* Bella <br /> Luna */}
+              TaskFlow
+            </span>
+          </div>
+
+          {/* Desktop Menu */}
+          <ul className="hidden md:flex items-center gap-8 font-medium text-white/80">
             {NAV_ITEMS.map((item) => (
               <li key={item.id}>
                 <button
+                  className="cursor-pointer rounded-md px-2 py-1.5 hover:text-[#53D22D] transition"
                   onClick={() => handleClick(item.id)}
-                  className="block w-full text-left py-2 px-3 text-heading hover:text-fg-brand"
                 >
                   {item.label}
                 </button>
               </li>
             ))}
           </ul>
+
+          {/* Right */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => scrollToSection("reservation")}
+              className="rounded-full bg-[#36E27B] px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-black hover:bg-[#2fb86a] transition cursor-pointer capitalize"
+            >
+              start free trial
+            </button>
+
+            <button
+              className="md:hidden text-white text-2xl"
+              onClick={() => setOpen(!open)}
+            >
+              {open ? <IoCloseSharp /> : <GiHamburgerMenu />}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Menu */}
+        {open && (
+          <div className="md:hidden pb-4">
+            <ul className="mt-2 flex flex-col gap-4 p-4 text-sm font-medium text-white backdrop-blur-md">
+              {NAV_ITEMS.map((item) => (
+                <li key={item.id}>
+                  <button
+                    onClick={() => handleClick(item.id)}
+                    className="cursor-pointer rounded-md px-2 py-1.5 hover:bg-[#53D22D]/80 backdrop-blur-md hover:text-black transition"
+                  >
+                    {item.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </nav>
   );
