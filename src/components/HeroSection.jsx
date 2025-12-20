@@ -1,10 +1,10 @@
 import React from "react";
+import { FaRegCheckCircle } from "react-icons/fa";
 
 const HeroSection = () => {
   return (
-    <section className="relative w-full overflow-hidden bg-[#0e1b14] px-4 sm:px-8 lg:px-16 py-16 md:py-28 flex justify-center">
+    <section className="relative w-full overflow-hidden bg-[#112117] px-4 sm:px-8 lg:px-16 py-16 md:py-28 flex justify-center">
       <div className="max-w-[1280px] w-full flex flex-col lg:flex-row items-center gap-16">
-        
         {/* LEFT CONTENT */}
         <div className="flex flex-col gap-6 lg:w-1/2 text-center lg:text-left z-10">
           <h1 className="text-white text-4xl sm:text-5xl xl:text-6xl font-extrabold leading-tight tracking-tight">
@@ -34,16 +34,12 @@ const HeroSection = () => {
           {/* TRUST TEXT */}
           <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 text-sm text-gray-500 pt-2">
             <span className="flex items-center gap-1">
-              <span className="material-symbols-outlined text-green-400 text-base">
-                check_circle
-              </span>
+              <FaRegCheckCircle className="text-green-400 text-base" />
               No credit card required
             </span>
             <span>•</span>
             <span className="flex items-center gap-1">
-              <span className="material-symbols-outlined text-green-400 text-base">
-                check_circle
-              </span>
+              <FaRegCheckCircle className="text-green-400 text-base" />
               14-day free trial
             </span>
           </div>
@@ -52,7 +48,6 @@ const HeroSection = () => {
         {/* RIGHT MOCKUP */}
         <div className="relative lg:w-1/2 w-full">
           <div className="relative aspect-[4/3] w-full rounded-2xl bg-gradient-to-br from-[#1b3224] to-[#122118] border border-[#366348] p-4 shadow-2xl overflow-hidden group">
-
             {/* GLASS SHINE */}
             <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
 
@@ -65,7 +60,6 @@ const HeroSection = () => {
 
             {/* MAIN CONTENT */}
             <div className="flex gap-4 h-[calc(100%-8rem)]">
-              
               {/* SIDEBAR */}
               <div className="hidden sm:block w-56 rounded-xl bg-[#1b3224] border border-[#366348]/50 p-3">
                 <div className="h-4 w-20 bg-[#366348] rounded mb-4" />
