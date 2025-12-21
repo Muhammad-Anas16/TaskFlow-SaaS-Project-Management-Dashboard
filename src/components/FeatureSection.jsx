@@ -33,7 +33,7 @@ const ITEMS = [
 
 const FeatureSection = () => {
   return (
-    <section className="py-20 px-4 sm:px-10 max-w-[1280px] mx-auto bg-[#112117]">
+    <section className="py-20 px-4 sm:px-10 mx-auto bg-[#112117]">
       <div className="flex flex-col gap-4 mb-12 text-center max-w-3xl mx-auto">
         <h2 className="text-[#36E27B] font-bold tracking-wide uppercase text-sm">
           Powerful Features

@@ -2,7 +2,7 @@ import React from "react";
 
 const PricingSection = () => {
   return (
-    <section className="bg-[#112117] py-24 px-4 sm:px-10 min-h-screen mx-auto">
+    <section className="bg-[#112117] py-24 px-4 sm:px-10 mx-auto">
       <div className="text-center mb-16">
         <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
           Simple, transparent pricing
