@@ -1,8 +1,9 @@
+"'use client';"
+
 import FeatureSection from "@/components/FeatureSection";
 import FinalCTA from "@/components/FinalCTA";
 import HeroSection from "@/components/HeroSection";
 import HowItWorks from "@/components/HowItWorks";
-import Footer from "@/components/main/Footer";
 import PricingSection from "@/components/PricingSection";
 import StrustedBy from "@/components/StrustedBy";
 import TestimonialSection from "@/components/TestimonialSection";

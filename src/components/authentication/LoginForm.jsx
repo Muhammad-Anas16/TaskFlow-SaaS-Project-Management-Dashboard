@@ -10,6 +10,7 @@ const LoginForm = ({
   setEmail,
   setPassword,
   handleLogin,
+  loading,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -68,9 +69,7 @@ const LoginForm = ({
 
       {/* Password (FLEX FIX) */}
       <div className="mb-2">
-        <label className="block text-xs mb-2 text-text-muted">
-          Password
-        </label>
+        <label className="block text-xs mb-2 text-text-muted">Password</label>
 
         <div
           className={`flex items-center h-11 rounded-full px-5 bg-surface-dark border ${
@@ -111,7 +110,11 @@ const LoginForm = ({
         type="submit"
         className="w-full h-11 rounded-full bg-[#36E27B] text-black font-semibold hover:scale-[0.98] transition shadow-[0_0_18px_rgba(54,226,123,0.35)]"
       >
-        Log in
+        {loading ? (
+          <TbConeFilled className="animate-spin text-2xl" />
+        ) : (
+          "Login"
+        )}
       </button>
 
       {/* Footer */}

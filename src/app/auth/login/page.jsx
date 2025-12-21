@@ -2,11 +2,14 @@
 
 import { useState } from "react";
 import LoginForm from "@/components/authentication/LoginForm";
+import { authClient } from "@/lib/auth-client.";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+
+  const [loading, setLoading] = useState(false);
 
   const validate = () => {
     const newErrors = {};
@@ -27,13 +30,47 @@ export default function LoginPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     if (!validate()) return;
 
+    setLoading(true);
     console.log("LOGIN DATA:", { email, password });
-    alert("Login submitted! Check console.");
+
+    const { data, error } = await authClient.signIn.email(
+      {
+        email,
+        password,
+        callbackURL: "/",
+        rememberMe: true,
+      },
+      {
+        onRequest: (ctx) => {
+          console.log("auth-client onRequest line 53 ", ctx);
+        },
+        onSuccess: (ctx) => {
+          console.log("checking data on SignIn when on success", ctx.data);
+          if (ctx.data.twoFactorRedirect) {
+            console.log("Please complete two-factor authentication");
+            return;
+          }
+        },
+        onError: (ctx) => {
+          console.log(ctx.error.message);
+        },
+      }
+    );
+
+    if (error) {
+      console.log("Login failed:", error.message);
+      setLoading(false);
+    }
+
+    console.log("Login data:", data);
+    setLoading(false);
+
+    // alert("Login submitted! Check console.");
   };
 
   return (
@@ -44,6 +81,7 @@ export default function LoginPage() {
       setEmail={setEmail}
       setPassword={setPassword}
       handleLogin={handleLogin}
+      loading={loading}
     />
   );
 }

@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 import RegisterForm from "@/components/authentication/RegisterForm";
+import { authClient } from "@/lib/auth-client.";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+
+  const [loading, setLoading] = useState(false);
 
   const validate = () => {
     const newErrors = {};
@@ -32,13 +35,42 @@ export default function RegisterPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
 
     if (!validate()) return;
 
-    console.log("REGISTER DATA:", { name, email, password });
-    alert("Registration submitted! Check console.");
+    const { data, error } = await authClient.signUp.email(
+      {
+        email,
+        password,
+        name,
+        image: "https://flowbite.com/docs/images/examples/image-2@2x.jpg",
+        callbackURL: "/dashboard",
+      },
+      {
+        onRequest: (ctx) => {
+          console.log("Registration request started");
+        },
+        onSuccess: (ctx) => {
+          console.log("Registration successful", ctx.data);
+        },
+        onError: (ctx) => {
+          console.log("Registration error", ctx.error.message);
+        },
+      }
+    );
+
+    if (error) {
+      console.log("Registration failed:", error.message);
+      setLoading(false);
+    }
+
+    console.log("Registration data:", data);
+
+    setLoading(false);
   };
 
   return (
@@ -51,6 +83,7 @@ export default function RegisterPage() {
       setPassword={setPassword}
       errors={errors}
       handleRegister={handleRegister}
+      loading={loading}
     />
   );
 }
