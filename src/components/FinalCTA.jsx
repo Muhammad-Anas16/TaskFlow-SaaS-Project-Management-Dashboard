@@ -1,29 +1,56 @@
-import React from "react";
+"use client";
+
+import { useState } from "react";
 
 const FinalCTA = () => {
+  const [email, setEmail] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!email) return;
+
+    console.log("User Email:", email);
+    setEmail("");
+  };
+
   return (
-    <section className="py-24 px-4 sm:px-10 bg-[#112117">
-      <div className="mx-auto rounded-3xl bg-gradient-to-b from-[#1b3224] to-[#122118] border border-[#366348] p-12 text-center relative overflow-hidden">
-        {/* Decor glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-1/2 bg-primary/20 blur-[100px] pointer-events-none"></div>
+    <section className="py-24 px-4 sm:px-10 bg-[#0f1d14]">
+      <div className="relative mx-auto max-w-5xl rounded-[32px] bg-gradient-to-b from-[#1b3224] to-[#122118] border border-[#366348] px-6 py-16 sm:px-12 text-center overflow-hidden">
+        
+        {/* Top glow */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[70%] h-[60%] bg-emerald-500/20 blur-[120px] pointer-events-none" />
+
         <div className="relative z-10 flex flex-col items-center gap-6">
-          <h2 className="text-white text-3xl md:text-5xl font-black leading-tight">
+          <h2 className="text-white text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight">
             Start Managing Smarter Today
           </h2>
-          <p className="text-gray-300 text-lg max-w-xl">
+
+          <p className="text-gray-300 text-base sm:text-lg max-w-xl">
             Join 10,000+ teams who have switched to TaskFlow. No credit card
             required.
           </p>
-          <div className="flex flex-col sm:flex-row w-full max-w-md gap-3 mt-4">
+
+          <form
+            onSubmit={handleSubmit}
+            className="mt-6 flex w-full max-w-md flex-col sm:flex-row gap-3"
+          >
             <input
-              className="flex-1 h-12 rounded-full bg-[#0f1b14] border border-[#366348] px-5 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
-              placeholder="Enter your email"
               type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              className="flex-1 h-12 rounded-full bg-[#0f1b14] border border-[#366348] px-5 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 transition"
             />
-            <button className="h-12 px-8 rounded-full bg-primary hover:bg-green-400 text-[#122118] font-bold transition-colors whitespace-nowrap">
+
+            <button
+              type="submit"
+              className="h-12 px-8 rounded-full bg-emerald-400 hover:bg-emerald-300 text-[#122118] font-bold transition whitespace-nowrap"
+            >
               Get Started
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </section>
