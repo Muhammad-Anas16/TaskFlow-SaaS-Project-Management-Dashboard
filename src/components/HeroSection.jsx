@@ -23,11 +23,11 @@ const HeroSection = () => {
 
           {/* BUTTONS */}
           <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center lg:justify-start">
-            <Link href={"/auth/login"} className="h-12 px-8 rounded-full bg-green-400 hover:bg-green-300 transition font-bold text-[#122118] shadow-[0_0_25px_rgba(54,226,123,0.35)]">
+            <Link href={"/auth/login"} className="py-3 px-8 rounded-full bg-green-400 hover:bg-green-300 transition font-bold text-sm text-[#122118] shadow-[0_0_25px_rgba(54,226,123,0.35)]">
               Start Free Trial
             </Link>
 
-            <Link href={"/dashboard"} className="h-12 px-8 rounded-full bg-[#1b3224] border border-[#366348] hover:bg-[#254632] transition font-bold text-white">
+            <Link href={"/dashboard"} className="py-3 px-8 rounded-full bg-[#1b3224] border border-[#366348] hover:bg-[#254632] transition text-sm font-bold text-white">
               View Dashboard
             </Link>
           </div>
