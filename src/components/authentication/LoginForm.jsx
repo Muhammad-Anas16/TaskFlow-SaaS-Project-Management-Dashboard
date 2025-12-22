@@ -108,7 +108,7 @@ const LoginForm = ({
       {/* Submit */}
       <button
         type="submit"
-        className="w-full h-11 rounded-full bg-[#36E27B] text-black font-semibold hover:scale-[0.98] transition shadow-[0_0_18px_rgba(54,226,123,0.35)]"
+        className="w-full h-11 rounded-full bg-[#36E27B] text-black font-semibold hover:scale-[0.98] transition shadow-[0_0_18px_rgba(54,226,123,0.35)] cursor-pointer mt-2 mb-4 flex items-center justify-center"
       >
         {loading ? (
           <TbConeFilled className="animate-spin text-2xl" />

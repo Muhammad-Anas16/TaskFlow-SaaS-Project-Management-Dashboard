@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-// import { useScroll } from "@/context/ScrollContext";
 import { TbConeFilled } from "react-icons/tb";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { IoClose } from "react-icons/io5";
 import { IoCloseSharp } from "react-icons/io5";
+import Link from "next/link";
+import { authClient } from "@/lib/auth-client.";
 
 const NAV_ITEMS = [
   { label: "Features", id: "features" },
@@ -15,6 +15,26 @@ const NAV_ITEMS = [
 ];
 
 const Navbar = () => {
+
+  const [user, setUser] = useState(false);
+
+  const logUserData = async () => {
+    const { data: session } = await authClient.getSession();
+    if (session) {
+      console.log("Current session in getSession:", session);
+      console.log("User info in getSession:", session.user);
+      console.log("Session info in getSession:", session.session);
+      setUser(true);
+    } else {
+      console.log("User not signed in getSession");
+      setUser(false);
+    }
+  };
+  // Call this function where needed
+  logUserData();
+
+  console.log("User state in Navbar:", user);
+
   const [open, setOpen] = useState(false);
   // const { scrollToSection } = useScroll();
 
@@ -65,12 +85,13 @@ const Navbar = () => {
 
           {/* Right */}
           <div className="flex items-center gap-3">
-            <button
+            <Link
+              href={"/auth/login"}
               onClick={() => scrollToSection("reservation")}
               className="rounded-full bg-[#36E27B] px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-black hover:bg-[#2fb86a] transition cursor-pointer capitalize"
             >
               start free trial
-            </button>
+            </Link>
 
             <button
               className="md:hidden text-white text-2xl"
