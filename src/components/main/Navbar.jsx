@@ -36,7 +36,6 @@ const Navbar = () => {
   console.log("User state in Navbar:", user);
 
   const [open, setOpen] = useState(false);
-  // const { scrollToSection } = useScroll();
 
   const handleClick = (id) => {
     const section = document.getElementById(id);
