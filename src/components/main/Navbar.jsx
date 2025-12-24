@@ -15,7 +15,7 @@ const NAV_ITEMS = [
 ];
 
 const Navbar = () => {
-  const [user, setUser] = useState(false);
+  // const [user, setUser] = useState(false);
 
   const logUserData = async () => {
     const { data: session } = await authClient.getSession();
@@ -29,10 +29,9 @@ const Navbar = () => {
       setUser(false);
     }
   };
-  // Call this function where needed
-  logUserData();
+  // logUserData();
 
-  console.log("User state in Navbar:", user);
+  // console.log("User state in Navbar:", user);
 
   const [open, setOpen] = useState(false);
 
