@@ -15,7 +15,6 @@ const NAV_ITEMS = [
 ];
 
 const Navbar = () => {
-
   const [user, setUser] = useState(false);
 
   const logUserData = async () => {
@@ -50,23 +49,22 @@ const Navbar = () => {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <div
+          <Link
+            href={user ? "/dashboard" : "/"}
             className="flex items-center gap-2 cursor-pointer"
             onClick={() => scrollToSection("home")}
           >
             <TbConeFilled className="text-[#36E27B] h-7 w-7" />
-
             {/* Desktop */}
             <span className="hidden sm:block text-2xl font-semibold text-white">
               TaskFlow
             </span>
-
             {/* Mobile */}
             <span className="block sm:hidden text-lg font-semibold leading-tight text-white">
               {/* Bella <br /> Luna */}
               TaskFlow
             </span>
-          </div>
+          </Link>
 
           {/* Desktop Menu */}
           <ul className="hidden md:flex items-center gap-8 font-medium text-white/80">
