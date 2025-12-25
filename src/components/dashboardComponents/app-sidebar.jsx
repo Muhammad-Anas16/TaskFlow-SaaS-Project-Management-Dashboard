@@ -23,7 +23,7 @@ const items = [
   { id: "projects", label: "Projects", icon: Folder },
   { id: "tasks", label: "Tasks", icon: CheckCircle },
   { id: "team", label: "Team", icon: Users },
-  { id: "analytics", label: "Analytics", icon: BarChart3 },
+  // { id: "analytics", label: "Analytics", icon: BarChart3 },
 ];
 
 export function AppSidebar() {
