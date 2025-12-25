@@ -1,38 +1,34 @@
-"use client";
+"use client"
 
-import { GiHamburgerMenu } from "react-icons/gi";
+import { FaBell, FaPlus } from "react-icons/fa";
+import { SidebarTrigger } from "../ui/sidebar"
 
-export default function DashboardTopbar({ onMenuClick }) {
+export function Topbar() {
   return (
-    <header className="sticky top-0 z-45 h-16 bg-[#0f1f17] px-4 flex items-center gap-4 border-b-2 border-[#254632] py-10">
-      {/* Hamburger ONLY on small screens */}
-      <button
-        onClick={onMenuClick}
-        className="lg:hidden text-white p-2 rounded hover:bg-white/10"
-      >
-        <GiHamburgerMenu className="text-2xl" />
-      </button>
+    <header className="flex h-16 items-center gap-4 border-b border-emerald-900 px-6">
+      <SidebarTrigger />
 
-      <div>
-        <h1 className="text-white font-semibold">Overview</h1>
-        <p className="text-sm text-white/70">
+      <div className="flex-1">
+        <h1 className="text-xl font-semibold">Overview</h1>
+        <p className="text-sm text-emerald-200/70">
           Welcome back, let’s get to work.
         </p>
       </div>
 
-      <div className="hidden md:flex flex-1 justify-center">
-        <input
-          placeholder="Search tasks, projects..."
-          className="max-w-md w-full rounded-full bg-[#1b3528] px-4 py-2 text-white outline-none"
-        />
-      </div>
+      <input
+        placeholder="Search tasks, projects..."
+        className="hidden md:block rounded-xl bg-[#132c21] px-4 py-2 text-sm text-white placeholder:text-emerald-200/50 outline-none"
+      />
 
-      <div className="ml-auto flex items-center gap-3">
-        <button className="text-white">🔔</button>
-        <button className="bg-[#2fe87c] px-4 py-2 rounded-full text-sm font-medium">
-          + New Project
-        </button>
-      </div>
+      <button className="rounded-full bg-[#132c21] p-2">
+        <FaBell size={18} />
+      </button>
+
+      <button className="flex items-center gap-2 rounded-xl bg-emerald-400 px-4 py-2 text-sm font-medium text-black">
+        <FaPlus size={16} />
+        New Project
+      </button>
     </header>
-  );
+  )
 }
+

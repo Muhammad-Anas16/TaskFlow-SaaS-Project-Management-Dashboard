@@ -1,12 +1,5 @@
-import React from 'react'
+import { DashboardContent } from "@/components/dashboardComponents/dashboard-content";
 
-const page = () => {
-  return (
-    <div>
-      <h1>Welcome to your Dashboard</h1>
-      <p>Here you can manage your tasks and projects.</p>
-    </div>
-  )
+export default function DashboardPage() {
+  return <DashboardContent />
 }
-
-export default page
