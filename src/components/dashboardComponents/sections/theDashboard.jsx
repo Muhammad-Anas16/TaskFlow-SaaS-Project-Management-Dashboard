@@ -9,17 +9,33 @@ export default function TheDashboard() {
   return (
     <div className="space-y-6">
       {/* STATS */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-5 md:grid-cols-4">
         {stats.map(([label, value]) => (
-          <div key={label} className="rounded-2xl bg-[#102c20] p-5">
-            <p className="text-sm text-emerald-200/70">{label}</p>
-            <p className="mt-2 text-3xl font-semibold">{value}</p>
+          <div
+            key={label}
+            className="
+              rounded-2xl
+              bg-gradient-to-br from-[#0f2f23] to-[#0b221a]
+              p-5
+              shadow-lg shadow-emerald-500/5
+            "
+          >
+            <p className="text-sm text-emerald-300/80">{label}</p>
+            <p className="mt-2 text-3xl font-bold">{value}</p>
           </div>
         ))}
       </div>
 
       {/* CHART */}
-      <div className="rounded-2xl bg-[#102c20] p-6 h-72 flex items-center justify-center text-emerald-200/60">
+      <div
+        className="
+          h-80 rounded-3xl
+          bg-gradient-to-br from-[#0f2f23] to-[#0b221a]
+          flex items-center justify-center
+          text-emerald-300/70
+          shadow-lg shadow-emerald-500/5
+        "
+      >
         Task Completion Rate (Chart Placeholder)
       </div>
     </div>

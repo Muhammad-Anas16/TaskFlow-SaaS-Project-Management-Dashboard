@@ -1,18 +1,20 @@
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/dashboardComponents/app-sidebar";
 import { Topbar } from "@/components/dashboardComponents/topbar";
-import { SidebarProvider } from "@/components/ui/sidebar";
 
 export default function DashboardLayout({ children }) {
   return (
-    <SidebarProvider defaultOpen>
-      <div className="flex min-h-screen bg-[#0b1d15] text-white">
-        <AppSidebar />
+    <SidebarProvider>
+      <AppSidebar />
 
-        <div className="flex flex-1 flex-col">
-          <Topbar />
-          <main className="p-6">{children}</main>
-        </div>
-      </div>
+      {/* SidebarInset handles spacing automatically */}
+      <SidebarInset className="flex min-h-screen flex-col bg-[#04140f]">
+        <Topbar />
+
+        <main className="flex-1 p-6">
+          {children}
+        </main>
+      </SidebarInset>
     </SidebarProvider>
   );
 }

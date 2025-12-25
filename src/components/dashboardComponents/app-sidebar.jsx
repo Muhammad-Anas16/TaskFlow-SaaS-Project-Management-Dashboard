@@ -27,22 +27,22 @@ const items = [
 
 export function AppSidebar() {
   return (
-    <Sidebar collapsible="icon" className="bg-[#0e261b] border-none">
+    <Sidebar className="border-none bg-[#081f17]">
       {/* LOGO */}
-      <SidebarHeader className="px-5 py-6">
+      <SidebarHeader className="px-6 py-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-400 text-black font-bold">
+          <div className="h-9 w-9 rounded-full bg-emerald-400 flex items-center justify-center font-bold text-black">
             ✓
           </div>
-          <div className="group-data-[collapsible=icon]:hidden">
-            <p className="font-semibold leading-none">TaskFlow</p>
-            <p className="text-xs text-emerald-200/70">Manage better</p>
+          <div>
+            <p className="font-semibold">TaskFlow</p>
+            <p className="text-xs text-emerald-300/70">Manage better</p>
           </div>
         </div>
       </SidebarHeader>
 
       {/* MENU */}
-      <SidebarContent>
+      <SidebarContent className="px-2">
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.id}>
@@ -54,7 +54,13 @@ export function AppSidebar() {
                     })
                   )
                 }
-                className="rounded-xl px-4 py-2 text-emerald-100/80 hover:bg-[#143a2a] hover:text-white"
+                className="
+                  rounded-xl px-4 py-3
+                  text-emerald-100
+                  hover:bg-emerald-500/10
+                  hover:text-white
+                  data-[active=true]:bg-emerald-500/20
+                "
               >
                 <item.icon className="h-4 w-4" />
                 <span>{item.label}</span>
@@ -64,16 +70,15 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarContent>
 
-      {/* FOOTER */}
-      <SidebarFooter className="p-4">
+      {/* USER */}
+      <SidebarFooter className="px-6 py-4">
         <div className="flex items-center gap-3">
-          <img
-            src="https://i.pravatar.cc/40"
-            className="h-9 w-9 rounded-full"
-          />
-          <div className="group-data-[collapsible=icon]:hidden">
+          <div className="h-9 w-9 rounded-full bg-black flex items-center justify-center">
+            A
+          </div>
+          <div>
             <p className="text-sm font-medium">Alex Morgan</p>
-            <p className="text-xs text-emerald-200/60">Product Lead</p>
+            <p className="text-xs text-emerald-300/60">Product Lead</p>
           </div>
         </div>
       </SidebarFooter>

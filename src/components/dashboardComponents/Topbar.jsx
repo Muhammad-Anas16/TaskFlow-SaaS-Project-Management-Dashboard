@@ -1,34 +1,38 @@
-"use client"
+"use client";
 
-import { FaBell, FaPlus } from "react-icons/fa";
-import { SidebarTrigger } from "../ui/sidebar"
+import { Bell, Plus, Search } from "lucide-react";
+import { SidebarTrigger } from "../ui/sidebar";
 
 export function Topbar() {
   return (
-    <header className="flex h-16 items-center gap-4 border-b border-emerald-900 px-6">
-      <SidebarTrigger />
+    <header className="flex h-16 items-center gap-4 border-b border-emerald-900/60 px-6">
+      <SidebarTrigger className={"text-white hover:bg-[#04140f] hover:text-emerald-300 cursor-pointer"} />
 
-      <div className="flex-1">
-        <h1 className="text-xl font-semibold">Overview</h1>
-        <p className="text-sm text-emerald-200/70">
+      <div className="flex flex-col">
+        <h1 className="text-lg font-semibold text-white">Overview</h1>
+        <span className="text-sm text-emerald-300/70">
           Welcome back, let’s get to work.
-        </p>
+        </span>
       </div>
 
-      <input
-        placeholder="Search tasks, projects..."
-        className="hidden md:block rounded-xl bg-[#132c21] px-4 py-2 text-sm text-white placeholder:text-emerald-200/50 outline-none"
-      />
+      <div className="ml-auto flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-2 rounded-full bg-[#0d2a20] px-4 py-2">
+          <Search size={14} className="text-emerald-300" />
+          <input
+            placeholder="Search tasks, projects..."
+            className="bg-transparent text-sm outline-none placeholder:text-emerald-300/50 text-white"
+          />
+        </div>
 
-      <button className="rounded-full bg-[#132c21] p-2">
-        <FaBell size={18} />
-      </button>
+        <button className="h-9 w-9 rounded-full bg-[#0d2a20] text-white flex items-center justify-center hover:bg-emerald-300/20 cursor-pointer">
+          <Bell size={16} />
+        </button>
 
-      <button className="flex items-center gap-2 rounded-xl bg-emerald-400 px-4 py-2 text-sm font-medium text-black">
-        <FaPlus size={16} />
-        New Project
-      </button>
+        <button className="flex items-center gap-2 rounded-full bg-emerald-400 px-4 py-2 text-sm font-extrabold text-black cursor-pointer hover:bg-emerald-500">
+          <Plus size={18} />
+          {/* New Project */}
+        </button>
+      </div>
     </header>
-  )
+  );
 }
-
