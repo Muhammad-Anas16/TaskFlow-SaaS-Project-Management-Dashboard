@@ -1,6 +1,6 @@
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/dashboardComponents/app-sidebar";
-import { Topbar } from "@/components/dashboardComponents/topbar";
+import { Topbar } from "@/components/dashboardComponents/Topbar";
 
 export default function DashboardLayout({ children }) {
   return (
