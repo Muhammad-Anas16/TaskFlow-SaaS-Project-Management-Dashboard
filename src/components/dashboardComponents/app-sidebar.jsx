@@ -79,15 +79,20 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarContent>
 
-      {/* USER */}
+      {/* FOOTER */}
       <SidebarFooter className="px-6 py-4 bg-[#112117] border-b border-emerald-500/20">
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-full bg-black flex items-center justify-center">
-            A
+          <div
+            className="h-9 w-9 rounded-full bg-black bg-cover bg-center flex items-center justify-center"
+            style={{
+              backgroundImage: image ? `url(${image})` : "none",
+            }}
+          >
           </div>
+
           <div>
-            <p className="text-sm font-medium">Alex Morgan</p>
-            <p className="text-xs text-emerald-300/60">Product Lead</p>
+            <p className="text-sm font-medium">{name}</p>
+            <p className="text-xs text-emerald-300/60">{email}</p>
           </div>
         </div>
       </SidebarFooter>
