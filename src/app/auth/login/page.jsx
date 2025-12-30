@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import LoginForm from "@/components/authentication/LoginForm";
-import { authClient } from "@/lib/auth-client.";
+import { authClient } from "@/lib/auth-client";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");

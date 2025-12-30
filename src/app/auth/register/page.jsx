@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import RegisterForm from "@/components/authentication/RegisterForm";
-import { authClient } from "@/lib/auth-client.";
+import { authClient } from "@/lib/auth-client";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");

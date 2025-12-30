@@ -5,7 +5,7 @@ import { TbConeFilled } from "react-icons/tb";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoCloseSharp } from "react-icons/io5";
 import Link from "next/link";
-import { authClient } from "@/lib/auth-client.";
+import { authClient } from "@/lib/auth-client";
 
 const NAV_ITEMS = [
   { label: "Features", id: "features" },

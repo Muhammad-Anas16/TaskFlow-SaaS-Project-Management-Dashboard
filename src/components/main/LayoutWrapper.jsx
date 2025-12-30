@@ -1,25 +1,44 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import Loading from "./Loading";
 
-const AppWrapper = ({ children }) => {
+export default function AuthWrapper({ children }) {
   const pathname = usePathname();
+  const router = useRouter();
 
-  const hideLayout =
-    pathname === "/auth/login" ||
-    pathname === "/auth/register" ||
-    pathname === "/admin" ||
-    pathname === "/dashboard";
+  const { data: session, isPending } = authClient.useSession();
 
-  return (
-    <>
-      {!hideLayout && <Navbar />}
-      {children}
-      {!hideLayout && <Footer />}
-    </>
-  );
+  const isLoggedIn = Boolean(session?.user?.id);
+
+  useEffect(() => {
+    if (isPending) return;
+
+    // ❌ Not logged in → block dashboard
+    if (!isLoggedIn && (pathname === "/dashboard" || pathname === "/")) {
+      console.log("redirecting to login I'm not logged in");
+      router.replace("/auth/login");
+      return;
+    }
+
+    // ❌ Logged in → block login & register
+    if (
+      isLoggedIn &&
+      (pathname === "/auth/login" ||
+        pathname === "/auth/register" ||
+        pathname === "/")
+    ) {
+      console.log("redirecting to dashboard");
+      router.replace("/dashboard");
+    }
+  }, [isLoggedIn, isPending, pathname, router]);
+
+  // ⏳ Loading state
+  if (isPending) {
+    return <Loading />;
+  }
+
+  return <>{children}</>;
 }
-
-export default AppWrapper;
