@@ -17,18 +17,16 @@ export default function AuthWrapper({ children }) {
     if (isPending) return;
 
     // ❌ Not logged in → block dashboard
-    if (!isLoggedIn && (pathname === "/dashboard" || pathname === "/")) {
+    if (!isLoggedIn && pathname === "/dashboard") {
       console.log("redirecting to login I'm not logged in");
-      router.replace("/auth/login");
+      router.replace("/auth/login" || "/");
       return;
     }
 
     // ❌ Logged in → block login & register
     if (
       isLoggedIn &&
-      (pathname === "/auth/login" ||
-        pathname === "/auth/register" ||
-        pathname === "/")
+      (pathname === "/auth/login" || pathname === "/auth/register")
     ) {
       console.log("redirecting to dashboard");
       router.replace("/dashboard");

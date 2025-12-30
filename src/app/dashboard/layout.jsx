@@ -8,12 +8,10 @@ export default function DashboardLayout({ children }) {
       <AppSidebar />
 
       {/* SidebarInset handles spacing automatically */}
-      <SidebarInset className="flex min-h-screen flex-col bg-[#04140f]">
+      <SidebarInset className="flex min-h-screen flex-col bg-[#112117]">
         <Topbar />
 
-        <main className="flex-1 p-6">
-          {children}
-        </main>
+        <main className="flex-1 p-6">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

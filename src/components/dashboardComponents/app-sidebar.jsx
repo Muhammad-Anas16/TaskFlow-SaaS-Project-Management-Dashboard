@@ -17,6 +17,7 @@ import {
   SidebarMenuItem,
 } from "../ui/sidebar";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import { authClient } from "@/lib/auth-client";
 
 const items = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -27,10 +28,15 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const { data: session } = authClient.useSession();
+
+  const sessionExpiresAt = session?.session?.expiresAt;
+  const { name, email, emailVerified, image } = session?.user;
+
   return (
-    <Sidebar className="border-r border-emerald-500/20 bg-[#02110c] text-emerald-300 w-64">
+    <Sidebar className="border-r border-emerald-500/20 bg-[#112117] text-emerald-300 w-64">
       {/* LOGO */}
-      <SidebarHeader className="px-6 py-6 bg-[#04140F] border-b border-emerald-500/20">
+      <SidebarHeader className="px-6 py-6 bg-[#112117] border-b border-emerald-500/20">
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-full bg-emerald-400 flex items-center justify-center font-bold text-black">
             <IoMdCheckmarkCircleOutline size={20} />
@@ -43,7 +49,7 @@ export function AppSidebar() {
       </SidebarHeader>
 
       {/* MENU */}
-      <SidebarContent className="px-2 py-4 flex-1 bg-[#04140F] border-b border-emerald-500/20">
+      <SidebarContent className="px-2 py-4 flex-1 bg-[#112117] border-b border-emerald-500/20">
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.id}>
@@ -74,7 +80,7 @@ export function AppSidebar() {
       </SidebarContent>
 
       {/* USER */}
-      <SidebarFooter className="px-6 py-4 bg-[#04140F] border-b border-emerald-500/20">
+      <SidebarFooter className="px-6 py-4 bg-[#112117] border-b border-emerald-500/20">
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-full bg-black flex items-center justify-center">
             A

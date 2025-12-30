@@ -15,13 +15,15 @@ export default function TheDashboard() {
             key={label}
             className="
               rounded-2xl
-              bg-gradient-to-br from-[#0f2f23] to-[#0b221a]
+              bg-[#1A2E22]
               p-5
               shadow-lg shadow-emerald-500/5
-            "
+              "
+              // bg-gradient-to-br 
+              // from-[#0f2f23] to-[#0b221a]
           >
             <p className="text-sm text-emerald-300/80">{label}</p>
-            <p className="mt-2 text-3xl font-bold">{value}</p>
+            <p className="mt-2 text-3xl text-white font-bold">{value}</p>
           </div>
         ))}
       </div>
@@ -30,11 +32,12 @@ export default function TheDashboard() {
       <div
         className="
           h-80 rounded-3xl
-          bg-gradient-to-br from-[#0f2f23] to-[#0b221a]
+          bg-[#1A2E22]
           flex items-center justify-center
           text-emerald-300/70
           shadow-lg shadow-emerald-500/5
-        "
+          "
+          // bg-gradient-to-br from-[#0f2f23] to-[#0b221a]
       >
         Task Completion Rate (Chart Placeholder)
       </div>
