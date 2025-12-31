@@ -29,15 +29,10 @@ export function Topbar() {
           />
         </div>
 
-        {/* <button className="h-9 w-9 rounded-full bg-[#0d2a20] text-white flex items-center justify-center hover:bg-emerald-300/20 cursor-pointer">
-          <Bell size={16} />
-        </button> */}
-        {/* Notification Button */}
         <NotificationButton count={3} />
 
         <button className="flex items-center gap-2 rounded-full bg-emerald-400 px-4 py-2 text-sm font-extrabold text-black cursor-pointer hover:bg-emerald-500">
           <Plus size={18} />
-          {/* New Project */}
         </button>
       </div>
     </header>
