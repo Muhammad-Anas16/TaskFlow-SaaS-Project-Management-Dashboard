@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { TbConeFilled } from "react-icons/tb";
-import { FaGoogle, FaGithub, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
+import { authClient } from "@/lib/auth-client";
 
 const LoginForm = ({
   email,
@@ -13,6 +14,15 @@ const LoginForm = ({
   loading,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
+
+  const handleGoogleSignIn = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/dashboard",
+      errorCallbackURL: "/error",
+      newUserCallbackURL: "/welcome",
+    });
+  };
 
   return (
     <form className="w-full max-w-[360px] text-white" onSubmit={handleLogin}>
@@ -26,18 +36,11 @@ const LoginForm = ({
       <div className="space-y-3 mb-6">
         <button
           type="button"
-          className="w-full h-11 rounded-full bg-white text-black font-medium flex items-center justify-center gap-3 hover:bg-gray-100 transition"
+          onClick={handleGoogleSignIn}
+          className="w-full h-11 rounded-full bg-white text-black font-medium flex items-center justify-center gap-3 hover:bg-gray-100 transition cursor-pointer"
         >
           <FaGoogle className="text-sm" />
           Continue with Google
-        </button>
-
-        <button
-          type="button"
-          className="w-full h-11 rounded-full bg-[#1f2937] text-white font-medium flex items-center justify-center gap-3 hover:bg-[#273449] transition"
-        >
-          <FaGithub className="text-sm" />
-          Continue with GitHub
         </button>
       </div>
 
@@ -110,11 +113,7 @@ const LoginForm = ({
         type="submit"
         className="w-full h-11 rounded-full bg-[#36E27B] text-black font-semibold hover:scale-[0.98] transition shadow-[0_0_18px_rgba(54,226,123,0.35)] cursor-pointer mt-2 mb-4 flex items-center justify-center"
       >
-        {loading ? (
-          <TbConeFilled className="animate-spin text-2xl" />
-        ) : (
-          "Login"
-        )}
+        {loading ? <TbConeFilled className="animate-spin text-2xl" /> : "Login"}
       </button>
 
       {/* Footer */}
