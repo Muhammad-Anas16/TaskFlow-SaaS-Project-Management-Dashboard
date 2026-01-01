@@ -63,7 +63,14 @@ export default function AddTeammate() {
 
             {/* Action */}
             <span
-              onClick={() => console.log("Add teammate:", user.email)}
+              onClick={() =>
+                console.log(
+                  "Add teammate using Email:",
+                  user.email,
+                  "and ID:",
+                  user._id
+                )
+              }
               className="text-xs font-medium text-emerald-400 cursor-pointer hover:underline"
             >
               Add
