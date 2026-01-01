@@ -31,9 +31,9 @@ export function Topbar() {
 
         <NotificationButton count={3} />
 
-        <button className="flex items-center gap-2 rounded-full bg-emerald-400 px-4 py-2 text-sm font-extrabold text-black cursor-pointer hover:bg-emerald-500">
+        {/* <button className="flex items-center gap-2 rounded-full bg-emerald-400 px-4 py-2 text-sm font-extrabold text-black cursor-pointer hover:bg-emerald-500">
           <Plus size={18} />
-        </button>
+        </button> */}
       </div>
     </header>
   );

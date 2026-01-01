@@ -119,7 +119,7 @@ export function AppSidebar() {
 
                 {/* User Info */}
                 <div className="flex-1 overflow-hidden">
-                  <p className="text-sm font-medium truncate">{session?.user?.name}</p>
+                  <p className="text-sm font-medium truncate text-white">{session?.user?.name}</p>
                   <p className="text-xs text-emerald-300/60 truncate">
                     {session?.user?.email || "No email provided"}
                   </p>
