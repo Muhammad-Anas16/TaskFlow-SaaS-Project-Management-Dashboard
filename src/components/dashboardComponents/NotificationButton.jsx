@@ -38,16 +38,16 @@ const NotificationButton = ({ count = 0 }) => {
       </DialogTrigger>
 
       {/* Modal */}
-      <DialogContent className="max-w-md p-0 overflow-hidden">
+      <DialogContent className="max-w-md p-0 overflow-hidden bg-[#132e22]">
         {/* Header */}
         <DialogHeader className="px-4 py-3 border-b">
-          <DialogTitle className="text-sm font-semibold">
+          <DialogTitle className="text-sm font-semibold text-white">
             Notifications
           </DialogTitle>
         </DialogHeader>
 
         {/* Body */}
-        <div className="max-h-80 overflow-y-auto">
+        <div className="max-h-80 overflow-y-auto text-white">
           {count > 0 ? (
             <>
               <div className="px-4 py-3 border-b">
