@@ -6,16 +6,8 @@ import Footer from "./Footer";
 import { authClient } from "@/lib/auth-client";
 
 const NavbarFooterWrapper = ({ children }) => {
-  const { isPending, data } = authClient.useSession();
+  const { isPending } = authClient.useSession();
   const pathname = usePathname();
-
-  if (data) {
-    const { name: username, email, image } = data?.user;
-
-    console.log("User Name:", username);
-    console.log("User Email:", email);
-    console.log("User Image:", image);
-  }
 
   const showNavbar =
     pathname === "/auth/login" ||

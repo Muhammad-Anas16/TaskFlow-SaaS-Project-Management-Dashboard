@@ -20,7 +20,7 @@ const LoginForm = ({
       provider: "google",
       callbackURL: "/dashboard",
       errorCallbackURL: "/error",
-      newUserCallbackURL: "/welcome",
+      newUserCallbackURL: "/",
     });
   };
 
