@@ -5,45 +5,28 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 export default function AddTeammate() {
-  const [theUsers, settheUsers] = useState([]);
+  const [theUsers, setTheUsers] = useState([]);
   const { data, isPending } = authClient.useSession();
+
   useEffect(() => {
-    if (isPending) return;
-    const sessionEmail = data?.user?.email;
+    if (isPending || !data?.user?.email) return;
+
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("/api/users");
-        const filteredUsers = response.data.filter(
-          (user) => user.email !== sessionEmail
+        const res = await axios.get("/api/users");
+
+        const filteredUsers = res.data.filter(
+          (user) => user.email !== data.user.email
         );
-        settheUsers(filteredUsers);
+
+        setTheUsers(filteredUsers);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
     };
 
     fetchUsers();
-  }, []);
-
-  console.log("Users State Data State:", theUsers);
-
-  // const users = [
-  //   {
-  //     name: "Sarah Khan",
-  //     email: "sarah@taskflow.dev",
-  //     image: "https://i.pravatar.cc/150?img=32",
-  //   },
-  //   {
-  //     name: "Mike Ross",
-  //     email: "mike@taskflow.dev",
-  //     image: "https://i.pravatar.cc/150?img=12",
-  //   },
-  //   {
-  //     name: "Anna Lee",
-  //     email: "anna@taskflow.dev",
-  //     image: "https://i.pravatar.cc/150?img=48",
-  //   },
-  // ];
+  }, [data, isPending]);
 
   return (
     <div className="space-y-4">
@@ -57,38 +40,40 @@ export default function AddTeammate() {
 
       {/* Users List */}
       <div className="space-y-3">
-        {theUsers.map((user, index) => (
+        {theUsers.map((user) => (
           <div
-            key={index}
+            key={user._id}
             className="flex items-center justify-between rounded-xl bg-[#102c20] p-4"
           >
             {/* User Info */}
             <div className="flex items-center gap-4">
-              {/* Avatar (background image) */}
+              {/* Avatar */}
               <div
                 className="h-11 w-11 rounded-full bg-cover bg-center shrink-0"
-                style={{
-                  backgroundImage: `url(${user.image})`,
-                }}
+                style={{ backgroundImage: `url(${user.image})` }}
               />
 
               <div>
-                <p className="text-sm font-medium text-white">{user.name}</p>
+                <p className="text-sm font-medium text-white">
+                  {user.username || user.email}
+                </p>
                 <p className="text-xs text-emerald-300/70">{user.email}</p>
               </div>
             </div>
 
-            {/* Add Action (UI only) */}
+            {/* Action */}
             <span
-              onClick={() => {
-                console.log("checking by Clicking on Email : ", user.email);
-              }}
-              className="text-xs font-medium text-emerald-400 cursor-pointer"
+              onClick={() => console.log("Add teammate:", user.email)}
+              className="text-xs font-medium text-emerald-400 cursor-pointer hover:underline"
             >
               Add
             </span>
           </div>
         ))}
+
+        {theUsers.length === 0 && (
+          <p className="text-sm text-emerald-300/50">No teammates available</p>
+        )}
       </div>
     </div>
   );
