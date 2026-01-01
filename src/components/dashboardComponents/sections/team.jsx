@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 export default function AddTeammate() {
   const [theUsers, settheUsers] = useState([]);
   const { data, isPending } = authClient.useSession();
-  console.log("Session Data in Team Section:", data?.user);
   useEffect(() => {
     if (isPending) return;
     const sessionEmail = data?.user?.email;
@@ -17,7 +16,6 @@ export default function AddTeammate() {
         const filteredUsers = response.data.filter(
           (user) => user.email !== sessionEmail
         );
-        console.log("Fetched Users:", filteredUsers);
         settheUsers(filteredUsers);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -27,7 +25,7 @@ export default function AddTeammate() {
     fetchUsers();
   }, []);
 
-  console.log("Users Data State:", theUsers);
+  console.log("Users State Data State:", theUsers);
 
   // const users = [
   //   {

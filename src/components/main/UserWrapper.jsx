@@ -17,6 +17,7 @@ const UserWrapper = ({ children }) => {
 
     const saveUser = async () => {
       try {
+        console.log("Saving User to Database:", data.user);
         const { name: username, email, image } = data.user;
 
         await axios.post(
