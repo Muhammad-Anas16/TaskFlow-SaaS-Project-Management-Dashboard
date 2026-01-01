@@ -14,11 +14,11 @@ const UserWrapper = ({ children }) => {
     // no user → nothing to do
     if (!data?.user) return;
 
-    const { name, email, image } = data.user;
+    const { name: username, email, image } = data.user;
 
     // save user (API handles duplicates)
     axios.post("/api/users", {
-      name,
+      username,
       email,
       image,
     });
