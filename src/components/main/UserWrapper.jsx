@@ -2,26 +2,34 @@
 
 import { authClient } from "@/lib/auth-client";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 const UserWrapper = ({ children }) => {
   const { data, isPending } = authClient.useSession();
+  const hasSavedUser = useRef(false); // prevents duplicate calls
 
   useEffect(() => {
-    // wait until session is resolved
     if (isPending) return;
-
-    // no user → nothing to do
     if (!data?.user) return;
+    if (hasSavedUser.current) return;
 
-    const { name: username, email, image } = data.user;
+    hasSavedUser.current = true;
 
-    // save user (API handles duplicates)
-    axios.post("/api/users", {
-      username,
-      email,
-      image,
-    });
+    const saveUser = async () => {
+      try {
+        const { name: username, email, image } = data.user;
+
+        await axios.post(
+          "/api/users",
+          { username, email, image },
+          { withCredentials: true } // REQUIRED in production
+        );
+      } catch (error) {
+        console.error("Failed to save user:", error);
+      }
+    };
+
+    saveUser();
   }, [data, isPending]);
 
   return <>{children}</>;
