@@ -5,20 +5,20 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 export default function AddTeammate() {
-  const [usersData, setUsersData] = useState([]);
+  const [theUsers, settheUsers] = useState([]);
   const { data, isPending } = authClient.useSession();
+  console.log("Session Data in Team Section:", data?.user);
   useEffect(() => {
     if (isPending) return;
     const sessionEmail = data?.user?.email;
     const fetchUsers = async () => {
       try {
         const response = await axios.get("/api/users");
-        console.log("Fetched Users:", response.data);
         const filteredUsers = response.data.filter(
           (user) => user.email !== sessionEmail
         );
-        setUsersData(filteredUsers);
-        // setUsersData(response.data);
+        console.log("Fetched Users:", filteredUsers);
+        settheUsers(filteredUsers);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -27,25 +27,25 @@ export default function AddTeammate() {
     fetchUsers();
   }, []);
 
-  console.log("Users Data State:", usersData);
+  console.log("Users Data State:", theUsers);
 
-  const users = [
-    {
-      name: "Sarah Khan",
-      email: "sarah@taskflow.dev",
-      image: "https://i.pravatar.cc/150?img=32",
-    },
-    {
-      name: "Mike Ross",
-      email: "mike@taskflow.dev",
-      image: "https://i.pravatar.cc/150?img=12",
-    },
-    {
-      name: "Anna Lee",
-      email: "anna@taskflow.dev",
-      image: "https://i.pravatar.cc/150?img=48",
-    },
-  ];
+  // const users = [
+  //   {
+  //     name: "Sarah Khan",
+  //     email: "sarah@taskflow.dev",
+  //     image: "https://i.pravatar.cc/150?img=32",
+  //   },
+  //   {
+  //     name: "Mike Ross",
+  //     email: "mike@taskflow.dev",
+  //     image: "https://i.pravatar.cc/150?img=12",
+  //   },
+  //   {
+  //     name: "Anna Lee",
+  //     email: "anna@taskflow.dev",
+  //     image: "https://i.pravatar.cc/150?img=48",
+  //   },
+  // ];
 
   return (
     <div className="space-y-4">
@@ -59,17 +59,19 @@ export default function AddTeammate() {
 
       {/* Users List */}
       <div className="space-y-3">
-        {users.map((user, index) => (
+        {theUsers.map((user, index) => (
           <div
             key={index}
             className="flex items-center justify-between rounded-xl bg-[#102c20] p-4"
           >
             {/* User Info */}
             <div className="flex items-center gap-4">
-              <img
-                src={user.image}
-                alt={user.name}
-                className="h-11 w-11 rounded-full object-cover"
+              {/* Avatar (background image) */}
+              <div
+                className="h-11 w-11 rounded-full bg-cover bg-center shrink-0"
+                style={{
+                  backgroundImage: `url(${user.image})`,
+                }}
               />
 
               <div>
@@ -79,7 +81,14 @@ export default function AddTeammate() {
             </div>
 
             {/* Add Action (UI only) */}
-            <span className="text-xs font-medium text-emerald-400">Add</span>
+            <span
+              onClick={() => {
+                console.log("checking by Clicking on Email : ", user.email);
+              }}
+              className="text-xs font-medium text-emerald-400 cursor-pointer"
+            >
+              Add
+            </span>
           </div>
         ))}
       </div>
