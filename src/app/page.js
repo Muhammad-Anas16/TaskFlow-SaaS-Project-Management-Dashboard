@@ -39,6 +39,7 @@ export default function Home() {
       <section id="contact">
         <FinalCTA />
       </section>
+
     </>
   );
 }
