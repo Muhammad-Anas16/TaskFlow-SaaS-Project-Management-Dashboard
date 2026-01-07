@@ -5,6 +5,8 @@ const userSchema = new mongoose.Schema(
         username: String,
         email: { type: String, required: true, unique: true },
         image: String,
+        friends: { type: [String], default: [] },
+        friendRequests: { type: [String], default: [] }
     },
     { timestamps: true }
 );
