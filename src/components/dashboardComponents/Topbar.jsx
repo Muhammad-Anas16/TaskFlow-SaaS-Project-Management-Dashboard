@@ -3,8 +3,26 @@
 import { Bell, Plus, Search } from "lucide-react";
 import { SidebarTrigger } from "../ui/sidebar";
 import NotificationButton from "./NotificationButton";
+import { authClient } from "@/lib/auth-client";
 
 export function Topbar() {
+  const { data, isPending } = authClient.useSession();
+  const userEmail = isPending ? "example@gmail.com" : data.user.email;
+
+  const notifications = [
+    {
+      message: "Friend request sent to Anas",
+      type: "success",
+      timeAgo: "Just now",
+    },
+    {
+      message: "Friend request accepted by Sarah",
+      type: "success",
+      timeAgo: "5 min ago",
+    },
+    { message: "New login detected", type: "info", timeAgo: "10 min ago" },
+  ];
+
   return (
     <header className="flex h-16 items-center gap-4 border-b border-emerald-900/60 px-6">
       <SidebarTrigger
@@ -29,11 +47,10 @@ export function Topbar() {
           />
         </div>
 
-        <NotificationButton count={3} />
-
-        {/* <button className="flex items-center gap-2 rounded-full bg-emerald-400 px-4 py-2 text-sm font-extrabold text-black cursor-pointer hover:bg-emerald-500">
-          <Plus size={18} />
-        </button> */}
+        <NotificationButton
+          userEmail={userEmail}
+          notifications={notifications}
+        />
       </div>
     </header>
   );

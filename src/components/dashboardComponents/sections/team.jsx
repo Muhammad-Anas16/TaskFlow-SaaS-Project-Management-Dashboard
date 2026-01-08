@@ -1,12 +1,15 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
+import { sendFriendRequest } from "@/lib/friendRequests";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 export default function AddTeammate() {
   const [theUsers, setTheUsers] = useState([]);
   const { data, isPending } = authClient.useSession();
+  const [buttonValue, setButtonValue] = useState(false);
+  const [loadingEmail, setLoadingEmail] = useState(null);
 
   useEffect(() => {
     if (isPending || !data?.user?.email) return;
@@ -27,6 +30,22 @@ export default function AddTeammate() {
 
     fetchUsers();
   }, [data, isPending]);
+
+  const handleReceive = async (friendEmail) => {
+    if (isPending) return;
+    if (!data?.user?.email) {
+      alert("User not authenticated");
+      return;
+    }
+
+    setLoadingEmail(friendEmail);
+    try {
+      await sendFriendRequest(data.user.email, friendEmail);
+    } catch (error) {
+      setLoadingEmail(null);
+      alert(error.message);
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -62,19 +81,13 @@ export default function AddTeammate() {
             </div>
 
             {/* Action */}
-            <span
-              onClick={() =>
-                console.log(
-                  "Add teammate using Email:",
-                  user.email,
-                  "and ID:",
-                  user._id
-                )
-              }
-              className="text-xs font-medium text-emerald-400 cursor-pointer hover:underline"
+            <button
+              disabled={loadingEmail === user.email}
+              onClick={() => handleReceive(user.email)}
+              className="text-xs font-medium text-emerald-400 cursor-pointer hover:underline hover:text-sm"
             >
-              Add
-            </span>
+              {loadingEmail === user.email ? "Adding..." : "Add"}
+            </button>
           </div>
         ))}
 
