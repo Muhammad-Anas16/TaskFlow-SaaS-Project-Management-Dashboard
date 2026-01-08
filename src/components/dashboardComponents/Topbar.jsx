@@ -5,28 +5,28 @@ import { SidebarTrigger } from "../ui/sidebar";
 import NotificationButton from "./NotificationButton";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export function Topbar() {
   const router = useRouter();
   const { data, isPending } = authClient.useSession();
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    if (!data?.user?.email) return;
+
+    const fetchNotifications = async () => {
+      const res = await axios.get(
+        `/api/notifications?email=${data.user.email}`
+      );
+      setNotifications(res.data);
+    };
+
+    fetchNotifications();
+  }, [data]);
 
   if (!data) return router.push("/auth/login");
-
-  const userEmail = isPending ? "example@gmail.com" : data.user.email;
-
-  const notifications = [
-    {
-      message: "Friend request sent to Anas",
-      type: "success",
-      timeAgo: "Just now",
-    },
-    {
-      message: "Friend request accepted by Sarah",
-      type: "success",
-      timeAgo: "5 min ago",
-    },
-    { message: "New login detected", type: "info", timeAgo: "10 min ago" },
-  ];
 
   return (
     <header className="flex h-16 items-center gap-4 border-b border-emerald-900/60 px-6">
@@ -53,7 +53,7 @@ export function Topbar() {
         </div>
 
         <NotificationButton
-          userEmail={userEmail}
+          userEmail={data?.user?.email}
           notifications={notifications}
         />
       </div>
