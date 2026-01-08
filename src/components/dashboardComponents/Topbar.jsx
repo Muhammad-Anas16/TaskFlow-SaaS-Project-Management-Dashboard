@@ -4,9 +4,14 @@ import { Bell, Plus, Search } from "lucide-react";
 import { SidebarTrigger } from "../ui/sidebar";
 import NotificationButton from "./NotificationButton";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 export function Topbar() {
+  const router = useRouter();
   const { data, isPending } = authClient.useSession();
+
+  if (!data) return router.push("/auth/login");
+
   const userEmail = isPending ? "example@gmail.com" : data.user.email;
 
   const notifications = [

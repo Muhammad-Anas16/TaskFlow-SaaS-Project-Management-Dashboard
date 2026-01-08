@@ -3,6 +3,7 @@ import Link from "next/link";
 import { TbConeFilled } from "react-icons/tb";
 import { FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
 import { authClient } from "@/lib/auth-client";
+import Loading from "./../main/Loading";
 
 const LoginForm = ({
   email,
@@ -14,14 +15,21 @@ const LoginForm = ({
   loading,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [load, setLoad] = useState(false);
 
   const handleGoogleSignIn = async () => {
-    await authClient.signIn.social({
-      provider: "google",
-      callbackURL: "/dashboard",
-      errorCallbackURL: "/error",
-      newUserCallbackURL: "/",
-    });
+    try {
+      setLoad(true);
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/dashboard",
+        errorCallbackURL: "/error",
+        newUserCallbackURL: "/",
+      });
+    } catch (error) {
+      setLoad(false);
+      alert(error.message);
+    }
   };
 
   return (
@@ -40,7 +48,7 @@ const LoginForm = ({
           className="w-full h-11 rounded-full bg-white text-black font-medium flex items-center justify-center gap-3 hover:bg-gray-100 transition cursor-pointer"
         >
           <FaGoogle className="text-sm" />
-          Continue with Google
+          {load ? "Loggining with Google" : "Continue with Google"}
         </button>
       </div>
 

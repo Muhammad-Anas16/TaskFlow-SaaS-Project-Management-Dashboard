@@ -46,14 +46,20 @@ export function AppSidebar() {
   const sessionExpiresAt = session?.session?.expiresAt;
 
   const handleLogout = async () => {
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          router.push("/auth/login");
-          router.refresh();
+    try {
+      await authClient.signOut({
+        fetchOptions: {
+          onSuccess: () => {
+            router.push("/auth/login");
+            router.refresh();
+          },
         },
-      },
-    });
+      });
+      router.push("/auth/login");
+    } catch (error) {
+      router.push("/auth/login");
+      alert(error.message);
+    }
   };
 
   return (
@@ -113,13 +119,17 @@ export function AppSidebar() {
                 <div
                   className="h-9 w-9 rounded-full bg-black bg-cover bg-center"
                   style={{
-                    backgroundImage: session?.user?.image ? `url(${session?.user?.image})` : "none",
+                    backgroundImage: session?.user?.image
+                      ? `url(${session?.user?.image})`
+                      : "none",
                   }}
                 />
 
                 {/* User Info */}
                 <div className="flex-1 overflow-hidden">
-                  <p className="text-sm font-medium truncate text-white">{session?.user?.name}</p>
+                  <p className="text-sm font-medium truncate text-white">
+                    {session?.user?.name}
+                  </p>
                   <p className="text-xs text-emerald-300/60 truncate">
                     {session?.user?.email || "No email provided"}
                   </p>
@@ -149,7 +159,8 @@ export function AppSidebar() {
             <DropdownMenuSeparator />
 
             <DropdownMenuItem
-              className="text-red-500 focus:text-red-500 cursor-pointer" title="Log out"
+              className="text-red-500 focus:text-red-500 cursor-pointer"
+              title="Log out"
               onClick={handleLogout}
             >
               <LogOut className="mr-2 h-4 w-4" />

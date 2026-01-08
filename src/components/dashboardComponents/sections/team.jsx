@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 export default function AddTeammate() {
   const [theUsers, setTheUsers] = useState([]);
   const { data, isPending } = authClient.useSession();
-  const [buttonValue, setButtonValue] = useState(false);
   const [loadingEmail, setLoadingEmail] = useState(null);
 
   useEffect(() => {
@@ -41,6 +40,7 @@ export default function AddTeammate() {
     setLoadingEmail(friendEmail);
     try {
       await sendFriendRequest(data.user.email, friendEmail);
+      setLoadingEmail(null)
     } catch (error) {
       setLoadingEmail(null);
       alert(error.message);
