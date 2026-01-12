@@ -1,9 +1,6 @@
 import { connectDB } from "@/lib/mongoose";
 import SocialUser from "@/models/SocialUser";
 
-/* =======================
-   GET USERS
-======================= */
 export const GET = async (request) => {
     try {
         await connectDB();
@@ -31,9 +28,6 @@ export const GET = async (request) => {
     }
 };
 
-/* =======================
-   CREATE OR RETURN USER
-======================= */
 export const POST = async (request) => {
     try {
         await connectDB();
