@@ -5,7 +5,8 @@ export const POST = async (req) => {
     try {
         await connectDB();
 
-        const { userEmail, owner, projectName, client, duration, tasks, teammates } = await req.json();
+        const { userEmail, projectName, client, duration, tasks, teammates } =
+            await req.json();
 
         if (!userEmail || !projectName || !client || !duration) {
             return Response.json(
@@ -14,18 +15,16 @@ export const POST = async (req) => {
             );
         }
 
-        // prevent duplicate project for same user
-        const existingProject = await Project.findOne({ userEmail, projectName });
-        if (existingProject) {
+        const exists = await Project.findOne({ userEmail, projectName });
+        if (exists) {
             return Response.json(
                 { message: "Project already exists" },
                 { status: 409 }
             );
         }
 
-        const newProject = await Project.create({
+        const project = await Project.create({
             userEmail,
-            owner: owner !== undefined ? owner : true,
             projectName,
             client,
             duration,
@@ -33,7 +32,24 @@ export const POST = async (req) => {
             teammates: teammates ?? [],
         });
 
-        return Response.json(newProject, { status: 201 });
+        return Response.json(project, { status: 201 });
+    } catch (error) {
+        return Response.json({ message: error.message }, { status: 500 });
+    }
+};
+
+export const GET = async (req) => {
+    try {
+        await connectDB();
+        const { searchParams } = new URL(req.url);
+        const userEmail = searchParams.get("userEmail");
+
+        if (!userEmail) {
+            return Response.json({ message: "User email is required" }, { status: 400 });
+        }
+
+        const projects = await Project.find({ userEmail });
+        return Response.json(projects, { status: 200 });
     } catch (error) {
         return Response.json({ message: error.message }, { status: 500 });
     }

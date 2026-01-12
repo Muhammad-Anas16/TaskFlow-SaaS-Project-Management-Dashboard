@@ -101,7 +101,9 @@ export default function AddTeammate() {
 
             {/* ACTION */}
             {isFriend ? (
-              <span className="text-xs font-medium text-green-400">Friend</span>
+              <span className="text-xs font-medium text-green-400">
+                Mate
+              </span>
             ) : isRequested ? (
               <span className="text-xs font-medium text-yellow-400">
                 Requested

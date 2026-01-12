@@ -41,7 +41,7 @@ export default function CreateProjectModal({ open, onClose, onCreate }) {
       teammates: teammates.filter((t) => t.trim() !== ""),
     };
 
-    console.log("✅ CREATED PROJECT DATA:", projectData);
+    // console.log("✅ CREATED PROJECT DATA:", projectData);
 
     onCreate?.(projectData);
     onClose(); // ✅ auto close modal

@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { FiMoreHorizontal, FiPlus, FiCalendar } from "react-icons/fi";
 import CreateProjectModal from "./addProjectsComponents/CreateProjectModal";
+import { authClient } from "@/lib/auth-client";
+import axios from "axios";
 
 /* ===================== DATA ===================== */
 const projects = [
@@ -35,12 +37,46 @@ const statusStyles = {
 };
 
 export default function Projects() {
+  const { data: session, isPending } = authClient.useSession();
   const [open, setOpen] = useState(false);
 
-  const handleCreateProject = (data) => {
-    console.log("📦 Created Project Data:", data);
-    setOpen(false); // close modal
+  const getProjects = async () => {
+    try {
+      const response = await axios.get(`/api/Projects`, {
+        params: { userEmail: session?.user?.email }, // automatically converts into userEmail=value
+      });
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Error fetching projects:",
+        error.response?.data || error.message
+      );
+      return [];
+    }
   };
+
+  const handleCreateProject = async (data) => {
+    if (isPending) return;
+    if (!session?.user) return;
+    try {
+      const res = await axios.post("/api/Projects", {
+        userEmail: session.user.email,
+        projectName: data?.projectName,
+        client: data?.client,
+        duration: data?.duration,
+        tasks: data?.tasks,
+        teammates: data?.teammates,
+      });
+      console.log("Project created:", res.data);
+      setOpen(false);
+    } catch (error) {
+      setOpen(false);
+      console.error("Error creating project:", error.message);
+    }
+  };
+
+  getProjects();
 
   return (
     <section className="min-h-screen px-6 py-10">
