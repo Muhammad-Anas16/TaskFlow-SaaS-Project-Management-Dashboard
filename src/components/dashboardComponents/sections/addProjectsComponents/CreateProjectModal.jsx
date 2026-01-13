@@ -41,8 +41,6 @@ export default function CreateProjectModal({ open, onClose, onCreate }) {
       teammates: teammates.filter((t) => t.trim() !== ""),
     };
 
-    // console.log("✅ CREATED PROJECT DATA:", projectData);
-
     onCreate?.(projectData);
     onClose(); // ✅ auto close modal
 
@@ -81,8 +79,10 @@ export default function CreateProjectModal({ open, onClose, onCreate }) {
             onChange={(e) => setClient(e.target.value)}
           />
 
+          {/* Updated duration input as time picker */}
           <input
-            className="w-full rounded-lg bg-[#0f241b] p-3 text-sm outline-none"
+            type="date"
+            className="w-full rounded-lg bg-[#0f241b] p-3 text-sm outline-none text-white"
             placeholder="Project Duration (e.g. 3 months)"
             value={duration}
             onChange={(e) => setDuration(e.target.value)}

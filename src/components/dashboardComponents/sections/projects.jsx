@@ -1,32 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiMoreHorizontal, FiPlus, FiCalendar } from "react-icons/fi";
 import CreateProjectModal from "./addProjectsComponents/CreateProjectModal";
 import { authClient } from "@/lib/auth-client";
 import axios from "axios";
-
-/* ===================== DATA ===================== */
-const projects = [
-  {
-    id: 1,
-    title: "Website Redesign",
-    client: "Acme Corp",
-    status: "High Priority",
-    statusColor: "orange",
-    progress: 75,
-    date: "Oct 24",
-  },
-  {
-    id: 2,
-    title: "Mobile App Launch",
-    client: "Stellar Inc.",
-    status: "In Review",
-    statusColor: "blue",
-    progress: 90,
-    date: "Nov 01",
-  },
-];
 
 /* ===================== STATUS STYLES ===================== */
 const statusStyles = {
@@ -39,45 +17,105 @@ const statusStyles = {
 export default function Projects() {
   const { data: session, isPending } = authClient.useSession();
   const [open, setOpen] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const getProjects = async () => {
+  const userEmail = session?.user?.email;
+
+  /* ===================== HELPERS ===================== */
+  const getStatus = (endDate) => {
+    if (!endDate) return "On Track";
+
+    const diffDays = (endDate - new Date()) / (1000 * 60 * 60 * 24);
+
+    if (diffDays < 0) return "High Priority";
+    if (diffDays <= 7) return "In Review";
+    if (diffDays <= 30) return "In Progress";
+    return "On Track";
+  };
+
+  const getStatusColor = (endDate) => {
+    if (!endDate) return "purple";
+
+    const diffDays = (endDate - new Date()) / (1000 * 60 * 60 * 24);
+
+    if (diffDays < 0) return "orange";
+    if (diffDays <= 7) return "blue";
+    return "green";
+  };
+
+  const getTimeProgress = (startDate, endDate) => {
+    if (!startDate || !endDate) return 0;
+
+    const total = endDate - startDate;
+    const elapsed = new Date() - startDate;
+
+    let progress = (elapsed / total) * 100;
+    progress = Math.min(Math.max(progress, 0), 100);
+
+    return Math.round(progress);
+  };
+
+  /* ===================== FETCH PROJECTS ===================== */
+  const fetchProjects = async () => {
+    if (!userEmail) return;
+
+    setLoading(true);
     try {
-      const response = await axios.get(`/api/Projects`, {
-        params: { userEmail: session?.user?.email }, // automatically converts into userEmail=value
+      const res = await axios.get("/api/Projects", {
+        params: { currentUserEmail: userEmail }, // ✅ UPDATED
       });
-      console.log(response.data);
-      return response.data;
+
+      const mapped = res.data.map((p) => {
+        const endDate = p.duration ? new Date(p.duration) : null;
+        const startDate = new Date(p.createdAt);
+
+        return {
+          ...p,
+          status: getStatus(endDate),
+          statusColor: getStatusColor(endDate),
+          progress: getTimeProgress(startDate, endDate),
+        };
+      });
+
+      setProjects(mapped);
     } catch (error) {
       console.error(
         "Error fetching projects:",
         error.response?.data || error.message
       );
-      return [];
+    } finally {
+      setLoading(false);
     }
   };
 
+  useEffect(() => {
+    fetchProjects();
+  }, [userEmail]);
+
+  /* ===================== CREATE PROJECT ===================== */
   const handleCreateProject = async (data) => {
-    if (isPending) return;
-    if (!session?.user) return;
+    if (isPending || !session?.user) return;
+
     try {
-      const res = await axios.post("/api/Projects", {
-        userEmail: session.user.email,
-        projectName: data?.projectName,
-        client: data?.client,
-        duration: data?.duration,
-        tasks: data?.tasks,
-        teammates: data?.teammates,
+      await axios.post("/api/Projects", {
+        userEmail: session.user.email, // owner
+        projectName: data.projectName,
+        client: data.client,
+        duration: data.duration,
+        tasks: data.tasks,
+        teammates: data.teammates,
       });
-      console.log("Project created:", res.data);
+
       setOpen(false);
+      fetchProjects(); // ✅ REFRESH LIST
     } catch (error) {
-      setOpen(false);
       console.error("Error creating project:", error.message);
+      setOpen(false);
     }
   };
 
-  getProjects();
-
+  /* ===================== UI ===================== */
   return (
     <section className="min-h-screen px-6 py-10">
       <div className="mx-auto max-w-7xl">
@@ -92,7 +130,7 @@ export default function Projects() {
           {/* Project Cards */}
           {projects.map((project) => (
             <div
-              key={project.id}
+              key={project._id} // ✅ correct key
               className="rounded-3xl bg-[#132e22] p-6 transition hover:-translate-y-1 hover:shadow-lg"
             >
               <div className="mb-5 flex items-center justify-between">
@@ -107,7 +145,7 @@ export default function Projects() {
               </div>
 
               <h3 className="mb-1 text-xl font-bold text-white">
-                {project.title}
+                {project.projectName}
               </h3>
               <p className="mb-6 text-sm text-emerald-200/70">
                 Client: {project.client}
@@ -129,7 +167,7 @@ export default function Projects() {
               <div className="flex justify-end border-t border-emerald-900 pt-4">
                 <div className="flex items-center gap-1 text-xs text-emerald-200/70">
                   <FiCalendar />
-                  {project.date}
+                  {new Date(project.createdAt).toLocaleDateString()}
                 </div>
               </div>
             </div>

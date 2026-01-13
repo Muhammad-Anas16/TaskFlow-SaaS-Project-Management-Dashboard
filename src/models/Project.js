@@ -5,8 +5,14 @@ const projectSchema = new mongoose.Schema(
         userEmail: { type: String, required: true },
         projectName: { type: String, required: true },
         client: { type: String, required: true },
-        duration: { type: String, required: true },
-        tasks: [{ type: String }],
+        duration: { type: Date, required: true },
+        tasks: [
+            {
+                title: { type: String, required: true },
+                isCompleted: { type: Boolean, default: false },
+            },
+        ],
+
         teammates: [{ type: String }],
     },
     { timestamps: true }
