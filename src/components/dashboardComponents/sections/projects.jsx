@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FiMoreHorizontal, FiPlus, FiCalendar } from "react-icons/fi";
+import { FiPlus, FiCalendar, FiEdit2, FiTrash2 } from "react-icons/fi";
 import CreateProjectModal from "./addProjectsComponents/CreateProjectModal";
 import { authClient } from "@/lib/auth-client";
 import axios from "axios";
@@ -16,74 +16,52 @@ const statusStyles = {
 
 export default function Projects() {
   const { data: session, isPending } = authClient.useSession();
-  const [open, setOpen] = useState(false);
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(false);
-
   const userEmail = session?.user?.email;
 
+  const [projects, setProjects] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [editingProject, setEditingProject] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   /* ===================== HELPERS ===================== */
-  const getStatus = (endDate) => {
-    if (!endDate) return "On Track";
-
-    const diffDays = (endDate - new Date()) / (1000 * 60 * 60 * 24);
-
-    if (diffDays < 0) return "High Priority";
-    if (diffDays <= 7) return "In Review";
-    if (diffDays <= 30) return "In Progress";
-    return "On Track";
+  const calculateStatus = (endDate) => {
+    if (!endDate) return { label: "On Track", color: "purple" };
+    const diffDays = (new Date(endDate) - new Date()) / 86400000;
+    if (diffDays < 0) return { label: "High Priority", color: "orange" };
+    if (diffDays <= 7) return { label: "In Review", color: "blue" };
+    if (diffDays <= 30) return { label: "In Progress", color: "green" };
+    return { label: "On Track", color: "purple" };
   };
 
-  const getStatusColor = (endDate) => {
-    if (!endDate) return "purple";
-
-    const diffDays = (endDate - new Date()) / (1000 * 60 * 60 * 24);
-
-    if (diffDays < 0) return "orange";
-    if (diffDays <= 7) return "blue";
-    return "green";
+  const calculateProgress = (start, end) => {
+    if (!start || !end) return 0;
+    const total = new Date(end) - new Date(start);
+    const elapsed = new Date() - new Date(start);
+    return Math.min(Math.max(Math.round((elapsed / total) * 100), 0), 100);
   };
 
-  const getTimeProgress = (startDate, endDate) => {
-    if (!startDate || !endDate) return 0;
-
-    const total = endDate - startDate;
-    const elapsed = new Date() - startDate;
-
-    let progress = (elapsed / total) * 100;
-    progress = Math.min(Math.max(progress, 0), 100);
-
-    return Math.round(progress);
-  };
-
-  /* ===================== FETCH PROJECTS ===================== */
+  /* ******** 100% Working right now ******** */
   const fetchProjects = async () => {
     if (!userEmail) return;
-
     setLoading(true);
     try {
       const res = await axios.get("/api/Projects", {
-        params: { currentUserEmail: userEmail }, // ✅ UPDATED
+        params: { currentUserEmail: userEmail },
       });
 
       const mapped = res.data.map((p) => {
-        const endDate = p.duration ? new Date(p.duration) : null;
-        const startDate = new Date(p.createdAt);
-
+        const status = calculateStatus(p.duration);
         return {
           ...p,
-          status: getStatus(endDate),
-          statusColor: getStatusColor(endDate),
-          progress: getTimeProgress(startDate, endDate),
+          status: status.label,
+          statusColor: status.color,
+          progress: calculateProgress(p.createdAt, p.duration),
         };
       });
 
       setProjects(mapped);
-    } catch (error) {
-      console.error(
-        "Error fetching projects:",
-        error.response?.data || error.message
-      );
+    } catch (err) {
+      console.error("Fetch projects failed:", err.message);
     } finally {
       setLoading(false);
     }
@@ -93,62 +71,112 @@ export default function Projects() {
     fetchProjects();
   }, [userEmail]);
 
-  /* ===================== CREATE PROJECT ===================== */
-  const handleCreateProject = async (data) => {
-    if (isPending || !session?.user) return;
-
+  /* ******** 100% Working right now ******** */
+  const createProject = async (payload) => {
     try {
       await axios.post("/api/Projects", {
-        userEmail: session.user.email, // owner
-        projectName: data.projectName,
-        client: data.client,
-        duration: data.duration,
-        tasks: data.tasks,
-        teammates: data.teammates,
+        userEmail,
+        ...payload,
       });
-
-      setOpen(false);
-      fetchProjects(); // ✅ REFRESH LIST
-    } catch (error) {
-      console.error("Error creating project:", error.message);
-      setOpen(false);
+      fetchProjects();
+    } catch (err) {
+      console.error("Create project failed:", err.message);
     }
+  };
+
+  /* ===================== UPDATE PROJECT ===================== */
+  const updateProject = async (projectId, payload) => {
+    try {
+      await axios.put(`/api/Projects/${projectId}`, {
+        currentUserEmail: userEmail, // ✅ REQUIRED BY BACKEND
+        ...payload,
+      });
+      fetchProjects();
+    } catch (err) {
+      console.error(
+        "Update project failed:",
+        err.response?.data || err.message
+      );
+    }
+  };
+
+  /* ===================== DELETE PROJECT ===================== */
+  const deleteProject = async (projectId) => {
+    if (!confirm("Delete this project permanently?")) return;
+    try {
+      await axios.delete(`/api/Projects/${projectId}`, {
+        params: { currentUserEmail: userEmail },
+      });
+      fetchProjects();
+    } catch (err) {
+      console.error(
+        "Delete project failed:",
+        err.response?.data || err.message
+      );
+    }
+  };
+
+  /* ===================== SAVE (CREATE OR UPDATE) ===================== */
+  const handleSaveProject = async (data) => {
+    if (editingProject) {
+      await updateProject(editingProject._id, data);
+    } else {
+      await createProject(data);
+    }
+    setOpen(false);
+    setEditingProject(null);
   };
 
   /* ===================== UI ===================== */
   return (
     <section className="min-h-screen px-6 py-10">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-10">
+        <header className="mb-10">
           <h1 className="text-3xl font-bold text-white">Active Projects</h1>
           <p className="text-sm text-emerald-200/70">
-            Manage your ongoing work and track progress.
+            Manage your ongoing work efficiently.
           </p>
-        </div>
+        </header>
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {/* Project Cards */}
           {projects.map((project) => (
             <div
-              key={project._id} // ✅ correct key
-              className="rounded-3xl bg-[#132e22] p-6 transition hover:-translate-y-1 hover:shadow-lg"
+              key={project._id}
+              className="group relative rounded-3xl bg-[#132e22] p-6 transition hover:-translate-y-1 hover:shadow-lg"
             >
-              <div className="mb-5 flex items-center justify-between">
-                <span
-                  className={`rounded-full border px-3 py-1 text-xs font-semibold ${
-                    statusStyles[project.statusColor]
-                  }`}
+              {/* EDIT + DELETE */}
+              <div className="absolute right-4 top-4 hidden gap-2 group-hover:flex">
+                <button
+                  onClick={() => {
+                    setEditingProject(project);
+                    setOpen(true);
+                  }}
+                  className="rounded-md bg-[#0f241b] p-2 text-emerald-300 hover:bg-emerald-400 hover:text-black"
                 >
-                  {project.status}
-                </span>
-                <FiMoreHorizontal className="text-emerald-200/70" />
+                  <FiEdit2 size={14} />
+                </button>
+
+                <button
+                  onClick={() => deleteProject(project._id)}
+                  className="rounded-md bg-[#0f241b] p-2 text-red-400 hover:bg-red-500 hover:text-black"
+                >
+                  <FiTrash2 size={14} />
+                </button>
               </div>
+
+              <span
+                className={`mb-4 inline-block rounded-full border px-3 py-1 text-xs font-semibold ${
+                  statusStyles[project.statusColor]
+                }`}
+              >
+                {project.status}
+              </span>
 
               <h3 className="mb-1 text-xl font-bold text-white">
                 {project.projectName}
               </h3>
               <p className="mb-6 text-sm text-emerald-200/70">
-                Client: {project.client}
+                {project.client}
               </p>
 
               <div className="mb-6">
@@ -164,40 +192,36 @@ export default function Projects() {
                 </div>
               </div>
 
-              <div className="flex justify-end border-t border-emerald-900 pt-4">
-                <div className="flex items-center gap-1 text-xs text-emerald-200/70">
-                  <FiCalendar />
-                  {new Date(project.createdAt).toLocaleDateString()}
-                </div>
+              <div className="flex justify-end border-t border-emerald-900 pt-4 text-xs text-emerald-200/70">
+                <FiCalendar className="mr-1" />
+                {new Date(project.createdAt).toLocaleDateString()}
               </div>
             </div>
           ))}
 
-          {/* Create Project */}
+          {/* CREATE NEW PROJECT CARD */}
           <button
-            onClick={() => setOpen(true)}
-            className="flex flex-col items-center justify-center gap-4 rounded-3xl border-2 border-dashed border-emerald-800 p-6 transition hover:border-emerald-400 hover:bg-emerald-400/5"
+            onClick={() => {
+              setEditingProject(null);
+              setOpen(true);
+            }}
+            className="flex flex-col items-center justify-center gap-4 rounded-3xl border-2 border-dashed border-emerald-800 p-6 hover:border-emerald-400"
           >
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#0f241b]">
-              <FiPlus className="text-3xl text-emerald-300" />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold text-white">
-                Create New Project
-              </h3>
-              <p className="text-sm text-emerald-200/70">
-                Start a new workflow
-              </p>
-            </div>
+            <FiPlus className="text-3xl text-emerald-300" />
+            <span className="font-semibold text-white">Create New Project</span>
           </button>
         </div>
       </div>
 
-      {/* Modal */}
+      {/* CREATE / UPDATE MODAL */}
       <CreateProjectModal
         open={open}
-        onClose={() => setOpen(false)}
-        onCreate={handleCreateProject}
+        initialData={editingProject}
+        onClose={() => {
+          setOpen(false);
+          setEditingProject(null);
+        }}
+        onCreate={handleSaveProject}
       />
     </section>
   );

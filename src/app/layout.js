@@ -3,6 +3,8 @@ import "./globals.css";
 import AuthWrapper from "@/components/main/LayoutWrapper";
 import NavbarFooterWrapper from "@/components/main/NavbarFooterWrapper";
 import UserWrapper from "@/components/main/UserWrapper";
+import ReduxProvider from "@/redux/ReduxProvider";
+import SessionProvider from "@/components/main/SessionProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,13 +27,17 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NavbarFooterWrapper>
-          <AuthWrapper>
-            <UserWrapper>
-              {children}
-            </UserWrapper>
-          </AuthWrapper>
-        </NavbarFooterWrapper>
+        <ReduxProvider>
+          <SessionProvider>
+            <NavbarFooterWrapper>
+              <AuthWrapper>
+                <UserWrapper>
+                  {children}
+                </UserWrapper>
+              </AuthWrapper>
+            </NavbarFooterWrapper>
+          </SessionProvider>
+        </ReduxProvider>
       </body>
     </html>
   );

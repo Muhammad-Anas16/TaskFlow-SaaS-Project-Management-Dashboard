@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TbConeFilled } from "react-icons/tb";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoCloseSharp } from "react-icons/io5";
 import Link from "next/link";
-import { authClient } from "@/lib/auth-client";
+import { useSelector } from "react-redux";
 
 const NAV_ITEMS = [
   { label: "Features", id: "features" },
@@ -14,28 +14,15 @@ const NAV_ITEMS = [
   { label: "Log In", id: "login" },
 ];
 
-const Navbar = () => {
+export default function Navbar() {
   const [user, setUser] = useState(false);
-
-  const logUserData = async () => {
-    const { data: session } = await authClient.getSession();
-    if (session) {
-      console.log("Current session in getSession:", session);
-      console.log("User info in getSession:", session.user);
-      console.log("Session info in getSession:", session.session);
-      setUser(true);
-    } else {
-      console.log("User not signed in getSession");
-      setUser(false);
-    }
-  };
-  // logUserData();
-
-  console.log("User state in Navbar:", user);
-
   const [open, setOpen] = useState(false);
 
+  const userData = useSelector((state) => state.isUser.value);
+
+  // Scroll handler (client-side only)
   const handleClick = (id) => {
+    if (typeof window === "undefined") return;
     const section = document.getElementById(id);
     if (section) {
       section.scrollIntoView({ behavior: "smooth" });
@@ -49,18 +36,14 @@ const Navbar = () => {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link
-            href={user ? "/dashboard" : "/"}
+            href={userData ? "/dashboard" : "/"}
             className="flex items-center gap-2 cursor-pointer"
-            onClick={() => scrollToSection("home")}
           >
             <TbConeFilled className="text-[#36E27B] h-7 w-7" />
-            {/* Desktop */}
             <span className="hidden sm:block text-2xl font-semibold text-white">
               TaskFlow
             </span>
-            {/* Mobile */}
             <span className="block sm:hidden text-lg font-semibold leading-tight text-white">
-              {/* Bella <br /> Luna */}
               TaskFlow
             </span>
           </Link>
@@ -83,7 +66,6 @@ const Navbar = () => {
           <div className="flex items-center gap-3">
             <Link
               href={"/auth/login"}
-              onClick={() => scrollToSection("reservation")}
               className="rounded-full bg-[#36E27B] px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-black hover:bg-[#2fb86a] transition cursor-pointer capitalize"
             >
               start free trial
@@ -118,6 +100,4 @@ const Navbar = () => {
       </div>
     </nav>
   );
-};
-
-export default Navbar;
+}

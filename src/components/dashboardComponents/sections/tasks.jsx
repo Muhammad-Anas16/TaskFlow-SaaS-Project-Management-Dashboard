@@ -40,6 +40,8 @@ export default function Tasks() {
         params: { currentUserEmail },
       });
 
+      console.log("Fetched projects for tasks:", res.data);
+
       const extractedTasks = res.data.flatMap((project) =>
         project.tasks.map((task, index) => ({
           ...task,
